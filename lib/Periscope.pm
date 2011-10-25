@@ -1,4 +1,10 @@
+use v5.10;
+use strict;
+use warnings;
+
 package Periscope;
+# ABSTRACT: Perl Module for viewing sites through a periscope
+
 use Moose;
 use Gtk2 -init;
 use Gtk2::WebKit;
