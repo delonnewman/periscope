@@ -9,11 +9,14 @@ die "Usage: $0 URL" unless @ARGV;
 
 my $p = Periscope->new(address => $ARGV[0]);
 $p->event('download-requested' => sub {
+	my $self     = shift;
 	my $view     = shift;
 	my $download = shift;
 	my $url      = $download->get_uri;
 
-	say "downloading $url...";
+	dump($self);
+
+	$self->notify("Buk download requested", "downloading $url...");
 	system("wget $url");
 
 	return FALSE;

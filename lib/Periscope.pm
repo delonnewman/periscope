@@ -9,6 +9,7 @@ use Moose;
 use Glib qw(TRUE FALSE);
 use Gtk2 -init;
 use Gtk2::WebKit;
+use Gtk2::Notify -init, 'Periscope';
 
 use Data::Dump qw(dump);
 use Exporter 'import';
@@ -63,18 +64,18 @@ sub BUILD {
 sub event($$&) {
 	my $self  = shift;
 	my $event = shift;
-	my $cb    = shift;
+	my $code  = shift;
 
 	dump($event);
-	dump($cb);
+	dump($code);
 
-	$self->{events}->{$event} = $cb;
+	$self->{events}->{$event} = sub { my $p = $self; $code->($p, @_) };
 
 	dump($self->{events});
 
-	$self->webview->signal_connect($event => $cb);
+	$self->webview->signal_connect($event => $self->{events}->{$event});
 
-	return $self;
+	$self;
 }
 
 after 'title' => sub {
@@ -84,6 +85,14 @@ after 'title' => sub {
 	$self->window->set_title($val);
 };
 
+sub notify {
+	my $self = shift;
+
+	Gtk2::Notify->new(@_)->show;
+
+	$self;
+}
+
 sub show {
 	my $self = shift;
 
@@ -92,6 +101,8 @@ sub show {
 
 	$self->window->show_all;
 	Gtk2->main;
+
+	$self;
 }
 
 1;
