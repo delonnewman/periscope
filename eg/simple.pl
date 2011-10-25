@@ -29,7 +29,10 @@ Periscope->new(address => $ARGV[0])
 
 		dump($req->get_uri);
 
-		return TRUE unless $req->get_uri =~ /jw\.org/;
+		my $dn = $ARGV[0];
+		$dn =~ s|http://||;
+
+		return TRUE unless $req->get_uri =~ /$dn/x;
 		
 		FALSE;
 	})
