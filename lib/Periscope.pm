@@ -44,7 +44,20 @@ sub BUILD {
 	# destroy event
 	$self->window->signal_connect(destroy => sub { Gtk2->main_quit });
 
+	# navigation-policy-decision-requested
+	$self->webview->signal_connect('navigation-policy-decision-requested' => sub {
+		# use this for hook for progress bar widget
+		my ($webview) = @_;
+		say $webview->get_progress;
+
+		dump(@_);
+
+		return FALSE;
+	});
+
 	$self->{events} = {};
+
+	dump($self->webview->get_progress);
 }
 
 sub event($$&) {
