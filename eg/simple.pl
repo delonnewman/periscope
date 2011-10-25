@@ -7,18 +7,30 @@ use Data::Dump qw(dump);
 
 die "Usage: $0 URL" unless @ARGV;
 
-my $p = Periscope->new(address => $ARGV[0]);
-$p->event('download-requested' => sub {
-	my $self     = shift;
-	my $view     = shift;
-	my $download = shift;
-	my $url      = $download->get_uri;
+Periscope->new(address => $ARGV[0])
+	->event('download-requested' => sub {
+		my $self     = shift;
+		my $view     = shift;
+		my $download = shift;
+		my $url      = $download->get_uri;
 
-	dump($self);
+		dump($self);
 
-	$self->notify("Buk download requested", "downloading $url...");
-	system("wget $url");
+		$self->notify("Buk download requested", "downloading $url...");
+		system("wget $url");
 
-	return FALSE;
-});
-$p->show;
+		FALSE;
+	})
+	->event('navigation-policy-decision-requested' => sub {
+		my $self  = shift;
+		my $view  = shift;
+		my $frame = shift;
+		my $req   = shift;
+
+		dump($req->get_uri);
+
+		return TRUE unless $req->get_uri =~ /jw\.org/;
+		
+		FALSE;
+	})
+	->show;
