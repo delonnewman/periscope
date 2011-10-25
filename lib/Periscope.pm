@@ -60,6 +60,8 @@ sub event($$&) {
 	dump($self->{events});
 
 	$self->webview->signal_connect($event => $cb);
+
+	return $self;
 }
 
 after 'title' => sub {
