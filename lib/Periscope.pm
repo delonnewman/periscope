@@ -31,6 +31,7 @@ has 'webview' => (
 );
 
 has 'address' => ( isa => 'Str', is => 'rw' );
+has 'icon'    => ( isa => 'Str', is => 'rw' );
 has 'title'   => ( isa => 'Str', is => 'rw', default => sub { shift->address });
 
 sub BUILD {
@@ -55,6 +56,9 @@ sub BUILD {
 
 		return FALSE;
 	});
+
+	# set icon
+	$self->window->set_default_icon_from_file($self->icon) if $self->icon;
 
 	$self->{events} = {};
 

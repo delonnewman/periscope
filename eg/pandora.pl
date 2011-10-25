@@ -7,4 +7,4 @@ use lib qw{ lib };
 use Periscope;
 use Data::Dump qw(dump);
 
-Periscope->new(address => 'http://pandora.com', title => 'Pandora Periscope')->show;
+Periscope->new(address => 'http://pandora.com', title => 'Pandora Periscope', icon => "eg/Pandora.png")->show;
