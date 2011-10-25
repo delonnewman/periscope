@@ -16,8 +16,10 @@ Periscope->new(address => $ARGV[0])
 
 		dump($self);
 
-		$self->notify("Buk download requested", "downloading $url...");
-		system("wget $url");
+		$self->notify("Download request", "downloading $url...");
+		if ( system("wget $url") == 0 ) {
+			$self->notify("Download request", "download complete");
+		}
 
 		FALSE;
 	})
