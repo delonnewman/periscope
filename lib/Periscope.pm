@@ -57,6 +57,8 @@ sub BUILD {
 		return FALSE;
 	});
 
+	dump(Gtk2::WebKit->major_version);
+
 	# set icon
 	$self->window->set_default_icon_from_file($self->icon) if $self->icon;
 
